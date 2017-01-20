@@ -7,7 +7,7 @@
  * @package  trakerr
  * @author   dev@trakerr.io
  * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache Licene v2
- * @link     https://github.com/trakerr/trakerr-php
+ * @link     https://github.com/trakerr-io/trakerr-php
  */
 
 /**

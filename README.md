@@ -17,7 +17,7 @@ To install the bindings via [Composer](http://getcomposer.org/), add the followi
   "repositories": [
     {
       "type": "git",
-      "url": "https://github.com/trakerr/trakerr-php.git"
+      "url": "https://github.com/trakerr-io/trakerr-php.git"
     }
   ],
   "require": {
