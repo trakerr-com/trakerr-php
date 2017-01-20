@@ -112,6 +112,20 @@ class TrakerrClient
     }
 
     /**
+     * Create an app event from the exception
+     *
+     * @param string $classification classification like "Error", "Debug", "Warning" or "Info" or a custom string
+     * @param string $eventType event type
+     * @param string $eventMessage event message
+     * @return mixed
+     */
+    public function createAppEventFromException($classification = "Error", Exception $exc)
+    {
+        $appEvent = $this->errorHelper->createAppEvent($classification, $exc);
+        return $this->fillDefaults($appEvent);
+    }
+
+    /**
      * Send the app event to Trakerr
      *
      * @param $appEvent app event to post

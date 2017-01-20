@@ -65,7 +65,7 @@ Please follow the [installation procedure](#installation--usage) and then run th
 
 ## Documentation For Models
 
- - [AppEvent](generated/SwaggerClient-php/docs/Model/AppEvent.md)
+ - [AppEvent](https://github.com/trakerr-io/trakerr-php/blob/master/generated/SwaggerClient-php/docs/Model/AppEvent.md)
 
 
 
