@@ -113,16 +113,16 @@ Some of the arguments have default values when passed in null. Below is a list o
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**api_key** | **str** | API Key for the application. | [Required]
-**url_path** | **str** | (optional) URL to Trakerr, specify null to use default. | [Optional if set to `null`] Defaults to reading url property under appSettings from the configuration.php.
-**context_app_version** | **str** | (optional) Application version, defaults to 1.0. | [Optional if set to `null`] Defaults to "1.0".
-**context_env_name** | **str** | (optional) Environment name like "development", "staging", "production" or a custom string. | [Optional if set to `null`] Defaults to "develoment".
-**context_env_version** | **str** | (optional) Environment version. | [Optional if set to `null`] Defaults to `null`. 
-**context_env_hostname** | **str** | (optional) Environment hostname. | [Optional if set to `null`] Defaults to `null`.
-**context_app_os** | **str** | (optional) Operating system. | [Optional if set to `null`] Defaults to `php_uname("s")`
-**context_app_os_version** | **str** | (optional)  Operating system version. | [Optional if set to `null`] Defaults to `php_uname("v")`.
-**context_data_center** | **str** | (optional) Provide a datacenter name. | [Optional if set to `null`] Defaults to `null`.
-**context_data_center_region** | **str** | (optional) Provide a datacenter region. | [Optional if set to `null`] Defaults to `null`.
+**apiKey** | **str** | API Key for the application. | [Required]
+**url** | **str** | (optional) URL to Trakerr, specify null to use default. | [Optional if set to `null`] Defaults to reading url property under appSettings from the configuration.php.
+**contextAppVersion** | **str** | (optional) Application version, defaults to 1.0. | [Optional if set to `null`] Defaults to "1.0".
+**contextEnvName** | **str** | (optional) Environment name like "development", "staging", "production" or a custom string. | [Optional if set to `null`] Defaults to "develoment".
+**contextEnvVersion** | **str** | (optional) Environment version. | [Optional if set to `null`] Defaults to `null`. 
+**contextEnvHostname** | **str** | (optional) Environment hostname. | [Optional if set to `null`] Defaults to `null`.
+**contextAppOS** | **str** | (optional) Operating system. | [Optional if set to `null`] Defaults to `php_uname("s")`
+**contextAppOSVersion** | **str** | (optional)  Operating system version. | [Optional if set to `null`] Defaults to `php_uname("v")`.
+**contextDataCenter** | **str** | (optional) Provide a datacenter name. | [Optional if set to `null`] Defaults to `null`.
+**contextDataCenterRegion** | **str** | (optional) Provide a datacenter region. | [Optional if set to `null`] Defaults to `null`.
 
 If you want to use a default value in a custom call, simply pass in `null` to the argument, and it will be filled with the default value.
 
