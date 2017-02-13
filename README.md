@@ -100,6 +100,32 @@ Please follow the [installation procedure](#installation--usage) and then run th
     $trakerr_client->sendEvent($appEvent);
 ```
 
+## About the php constructor
+The `TrakerrClient` class above can be constructed to take aditional data, rather than using the configured defaults. The constructor signature is:
+
+```php
+public function __construct($apiKey = null, $url = null, $contextAppVersion = "1.0",
+$contextEnvName = "development", $contextEnvVersion = null, $contextEnvHostname = null, $contextAppOS = null,
+$contextAppOSVersion = null, $contextDataCenter = null, $contextDataCenterRegion = null)
+```
+
+Some of the arguments have default values when passed in null. Below is a list of the arguments, and what Trakerr expects so you can pass in custom data.
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**apiKey** | **str** | API Key for the application. | [Required]
+**url** | **str** | (optional) URL to Trakerr, specify null to use default. | [Optional if set to `null`] Defaults to reading url property under appSettings from the configuration.php.
+**contextAppVersion** | **str** | (optional) Application version, defaults to 1.0. | [Optional if set to `null`] Defaults to "1.0".
+**contextEnvName** | **str** | (optional) Environment name like "development", "staging", "production" or a custom string. | [Optional if set to `null`] Defaults to "develoment".
+**contextEnvVersion** | **str** | (optional) Environment version. | [Optional if set to `null`] Defaults to `null`. 
+**contextEnvHostname** | **str** | (optional) Environment hostname. | [Optional if set to `null`] Defaults to `null`.
+**contextAppOS** | **str** | (optional) Operating system. | [Optional if set to `null`] Defaults to `php_uname("s")`
+**contextAppOSVersion** | **str** | (optional)  Operating system version. | [Optional if set to `null`] Defaults to `php_uname("v")`.
+**contextDataCenter** | **str** | (optional) Provide a datacenter name. | [Optional if set to `null`] Defaults to `null`.
+**contextDataCenterRegion** | **str** | (optional) Provide a datacenter region. | [Optional if set to `null`] Defaults to `null`.
+
+If you want to use a default value in a custom call, simply pass in `null` to the argument, and it will be filled with the default value.
+
 ## Documentation For Models
 
  - [AppEvent](https://github.com/trakerr-io/trakerr-php/blob/master/generated/SwaggerClient-php/docs/Model/AppEvent.md)
