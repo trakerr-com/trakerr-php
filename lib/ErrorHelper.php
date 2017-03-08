@@ -1,6 +1,30 @@
 <?php
 
 /**
+ * TrakerrClientsAPI
+ * PHP version 5
+ *
+ * @category Class
+ * @package  trakerr
+ * @author   dev@trakerr.io
+ * @license  http://www.apache.org/licenses/LICENSE-2.0 Apache Licene v2
+ * @link     https://github.com/trakerr-io/trakerr-php
+ */
+
+/**
+ * Trakerr Client API
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 namespace trakerr;
 
@@ -14,27 +38,45 @@ class ErrorHelper
 {
     private $trakerrClient;
 
-    /*
-     * Constructor that takes in the trakerr client to use.
+    /**
+     * ErrorHelper constructor.
+     *
+     * @param $trakerrClient TrakerrClient being used by the class.
      */
     public function __construct(\trakerr\TrakerrClient $trakerrClient)
     {
         $this->trakerrClient = $trakerrClient;
     }
 
-    public function createAppEvent($classification, Exception $exc) {
+    /**
+     *Creates the AppEvent and parses the stacktrace.
+     *
+     * @param $classification String representation the level of the error.
+     * @param $exc Exception to be parsed.
+     * @return AppEvent instance which has the StackTrace, classification, name, and message set.
+     */
+    public function createAppEvent($classification, Exception $exc)
+    {
         $appEvent = $this->trakerrClient->createAppEvent($classification, get_class($exc), $exc->getMessage());
         $appEvent->setEventStacktrace($this->createStacktrace(array(), $exc));
         return $appEvent;
     }
 
-    private function createStacktrace($stacktrace, Exception $exc) {
+    /**
+     *Creates and returns a serializable representation of the error's stacktrace.
+     *
+     * @param $stacktrace StackTrace object to populate.
+     * @param $exc Exception to be parsed.
+     * @return An array of InnerStackTrace objects (a StackTrace object).
+     */
+    private function createStacktrace($stacktrace, Exception $exc)
+    {
 
         $innerStacktrace = new InnerStackTrace();
         $innerStacktrace->setMessage($exc->getMessage());
         $innerStacktrace->setType(get_class($exc));
 
-        if(!$exc->getTrace()) {
+        if (!$exc->getTrace()) {
             $stacktraceLines = array();
 
             $stacktraceLine = new StackTraceLine();
@@ -49,22 +91,25 @@ class ErrorHelper
         } else {
             $stacktraceLines = array();
 
-            foreach($exc->getTrace() as $item) {
+            foreach ($exc->getTrace() as $item) {
                 $stacktraceLine = new StackTraceLine();
                 $function = isset($item["class"]) ? $item["class"] . "->" : "";
                 $function = $function . $item["function"];
                 $stacktraceLine->setFunction($function);
-                if(isset($item["line"])) $stacktraceLine->setLine($item["line"]);
-                if(isset($item["file"])) $stacktraceLine->setFile($item["file"]);
+                if (isset($item["line"])) {
+                    $stacktraceLine->setLine($item["line"]);
+                }
+                if (isset($item["file"])) {
+                    $stacktraceLine->setFile($item["file"]);
+                }
                 $stacktraceLines[] = $stacktraceLine;
-
             }
 
             $innerStacktrace->setTraceLines($stacktraceLines);
 
             $stacktrace[] = $innerStacktrace;
 
-            if($exc->getPrevious()) {
+            if ($exc->getPrevious()) {
                 $stacktrace = $this->createStacktrace($stacktrace, $exc->getPrevious());
             }
         }
@@ -72,6 +117,14 @@ class ErrorHelper
         return $stacktrace;
     }
 
+    /**
+     *Error handler that gets called during a runtime interrupt.
+     *
+     * @param $code Error level enum.
+     * @param $message Message of the exception.
+     * @param $file Codefile that threw the error.
+     * @param $line Line number of the throwing code.
+     */
     public function onError($code, $message, $file, $line)
     {
         $exc = new Exception($message);
@@ -100,12 +153,20 @@ class ErrorHelper
         $this->trakerrClient->sendEvent($appEvent);
     }
 
+     /**
+     *Error handler that gets called during an exception interrupt.
+     *
+     * @param $exc Exception that triggered the event.
+     */
     public function onException($exc)
     {
         $appEvent = $this->buildAppEvent("Error", $exc);
         $this->trakerrClient->sendEvent($appEvent);
     }
 
+    /**
+     *Error handler that gets called during program shutdown.
+     */
     public function onShutdown()
     {
         $error = error_get_last();
@@ -120,6 +181,9 @@ class ErrorHelper
         $this->trakerrClient->sendEvent($appEvent);
     }
 
+     /**
+     *Registers 'on' fuctions to their proper capture states with the program.
+     */
     public function register()
     {
         set_error_handler([$this, 'onError'], error_reporting());
