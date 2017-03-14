@@ -67,6 +67,7 @@ class AppEvent implements ArrayAccess
       */
     protected static $swaggerTypes = array(
         'api_key' => 'string',
+        'log_level' => 'string',
         'classification' => 'string',
         'event_type' => 'string',
         'event_message' => 'string',
@@ -75,7 +76,9 @@ class AppEvent implements ArrayAccess
         'event_user' => 'string',
         'event_session' => 'string',
         'context_app_version' => 'string',
+        'deployment_stage' => 'string',
         'context_env_name' => 'string',
+        'context_env_language' => 'string',
         'context_env_version' => 'string',
         'context_env_hostname' => 'string',
         'context_app_browser' => 'string',
@@ -99,6 +102,7 @@ class AppEvent implements ArrayAccess
      */
     protected static $attributeMap = array(
         'api_key' => 'apiKey',
+        'log_level' => 'logLevel',
         'classification' => 'classification',
         'event_type' => 'eventType',
         'event_message' => 'eventMessage',
@@ -107,7 +111,9 @@ class AppEvent implements ArrayAccess
         'event_user' => 'eventUser',
         'event_session' => 'eventSession',
         'context_app_version' => 'contextAppVersion',
+        'deployment_stage' => 'deploymentStage',
         'context_env_name' => 'contextEnvName',
+        'context_env_language' => 'contextEnvLanguage',
         'context_env_version' => 'contextEnvVersion',
         'context_env_hostname' => 'contextEnvHostname',
         'context_app_browser' => 'contextAppBrowser',
@@ -131,6 +137,7 @@ class AppEvent implements ArrayAccess
      */
     protected static $setters = array(
         'api_key' => 'setApiKey',
+        'log_level' => 'setLogLevel',
         'classification' => 'setClassification',
         'event_type' => 'setEventType',
         'event_message' => 'setEventMessage',
@@ -139,7 +146,9 @@ class AppEvent implements ArrayAccess
         'event_user' => 'setEventUser',
         'event_session' => 'setEventSession',
         'context_app_version' => 'setContextAppVersion',
+        'deployment_stage' => 'setDeploymentStage',
         'context_env_name' => 'setContextEnvName',
+        'context_env_language' => 'setContextEnvLanguage',
         'context_env_version' => 'setContextEnvVersion',
         'context_env_hostname' => 'setContextEnvHostname',
         'context_app_browser' => 'setContextAppBrowser',
@@ -163,6 +172,7 @@ class AppEvent implements ArrayAccess
      */
     protected static $getters = array(
         'api_key' => 'getApiKey',
+        'log_level' => 'getLogLevel',
         'classification' => 'getClassification',
         'event_type' => 'getEventType',
         'event_message' => 'getEventMessage',
@@ -171,7 +181,9 @@ class AppEvent implements ArrayAccess
         'event_user' => 'getEventUser',
         'event_session' => 'getEventSession',
         'context_app_version' => 'getContextAppVersion',
+        'deployment_stage' => 'getDeploymentStage',
         'context_env_name' => 'getContextEnvName',
+        'context_env_language' => 'getContextEnvLanguage',
         'context_env_version' => 'getContextEnvVersion',
         'context_env_hostname' => 'getContextEnvHostname',
         'context_app_browser' => 'getContextAppBrowser',
@@ -189,8 +201,28 @@ class AppEvent implements ArrayAccess
         return self::$getters;
     }
 
+    const LOG_LEVEL_DEBUG = 'debug';
+    const LOG_LEVEL_INFO = 'info';
+    const LOG_LEVEL_WARNING = 'warning';
+    const LOG_LEVEL_ERROR = 'error';
+    const LOG_LEVEL_FATAL = 'fatal';
     
 
+    
+    /**
+     * Gets allowable values of the enum
+     * @return string[]
+     */
+    public function getLogLevelAllowableValues()
+    {
+        return [
+            self::LOG_LEVEL_DEBUG,
+            self::LOG_LEVEL_INFO,
+            self::LOG_LEVEL_WARNING,
+            self::LOG_LEVEL_ERROR,
+            self::LOG_LEVEL_FATAL,
+        ];
+    }
     
 
     /**
@@ -206,6 +238,7 @@ class AppEvent implements ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['api_key'] = isset($data['api_key']) ? $data['api_key'] : null;
+        $this->container['log_level'] = isset($data['log_level']) ? $data['log_level'] : null;
         $this->container['classification'] = isset($data['classification']) ? $data['classification'] : null;
         $this->container['event_type'] = isset($data['event_type']) ? $data['event_type'] : null;
         $this->container['event_message'] = isset($data['event_message']) ? $data['event_message'] : null;
@@ -214,7 +247,9 @@ class AppEvent implements ArrayAccess
         $this->container['event_user'] = isset($data['event_user']) ? $data['event_user'] : null;
         $this->container['event_session'] = isset($data['event_session']) ? $data['event_session'] : null;
         $this->container['context_app_version'] = isset($data['context_app_version']) ? $data['context_app_version'] : null;
+        $this->container['deployment_stage'] = isset($data['deployment_stage']) ? $data['deployment_stage'] : null;
         $this->container['context_env_name'] = isset($data['context_env_name']) ? $data['context_env_name'] : null;
+        $this->container['context_env_language'] = isset($data['context_env_language']) ? $data['context_env_language'] : null;
         $this->container['context_env_version'] = isset($data['context_env_version']) ? $data['context_env_version'] : null;
         $this->container['context_env_hostname'] = isset($data['context_env_hostname']) ? $data['context_env_hostname'] : null;
         $this->container['context_app_browser'] = isset($data['context_app_browser']) ? $data['context_app_browser'] : null;
@@ -238,6 +273,11 @@ class AppEvent implements ArrayAccess
         if ($this->container['api_key'] === null) {
             $invalid_properties[] = "'api_key' can't be null";
         }
+        $allowed_values = array("debug", "info", "warning", "error", "fatal");
+        if (!in_array($this->container['log_level'], $allowed_values)) {
+            $invalid_properties[] = "invalid value for 'log_level', must be one of #{allowed_values}.";
+        }
+
         if ($this->container['classification'] === null) {
             $invalid_properties[] = "'classification' can't be null";
         }
@@ -259,6 +299,10 @@ class AppEvent implements ArrayAccess
     public function valid()
     {
         if ($this->container['api_key'] === null) {
+            return false;
+        }
+        $allowed_values = array("debug", "info", "warning", "error", "fatal");
+        if (!in_array($this->container['log_level'], $allowed_values)) {
             return false;
         }
         if ($this->container['classification'] === null) {
@@ -296,6 +340,31 @@ class AppEvent implements ArrayAccess
     }
 
     /**
+     * Gets log_level
+     * @return string
+     */
+    public function getLogLevel()
+    {
+        return $this->container['log_level'];
+    }
+
+    /**
+     * Sets log_level
+     * @param string $log_level (optional) Logging level, one of 'debug','info','warning','error', 'fatal', defaults to 'error'
+     * @return $this
+     */
+    public function setLogLevel($log_level)
+    {
+        $allowed_values = array('debug', 'info', 'warning', 'error', 'fatal');
+        if (!in_array($log_level, $allowed_values)) {
+            throw new \InvalidArgumentException("Invalid value for 'log_level', must be one of 'debug', 'info', 'warning', 'error', 'fatal'");
+        }
+        $this->container['log_level'] = $log_level;
+
+        return $this;
+    }
+
+    /**
      * Gets classification
      * @return string
      */
@@ -306,7 +375,7 @@ class AppEvent implements ArrayAccess
 
     /**
      * Sets classification
-     * @param string $classification one of 'debug','info','warning','error' or a custom string
+     * @param string $classification (optional) one of 'error' or a custom string for non-errors, defaults to 'error'
      * @return $this
      */
     public function setClassification($classification)
@@ -327,7 +396,7 @@ class AppEvent implements ArrayAccess
 
     /**
      * Sets event_type
-     * @param string $event_type type or event or error (eg. NullPointerException)
+     * @param string $event_type type of the event or error (eg. NullPointerException)
      * @return $this
      */
     public function setEventType($event_type)
@@ -464,6 +533,27 @@ class AppEvent implements ArrayAccess
     }
 
     /**
+     * Gets deployment_stage
+     * @return string
+     */
+    public function getDeploymentStage()
+    {
+        return $this->container['deployment_stage'];
+    }
+
+    /**
+     * Sets deployment_stage
+     * @param string $deployment_stage (optional) deployment stage, one of 'development','staging','production' or a custom string
+     * @return $this
+     */
+    public function setDeploymentStage($deployment_stage)
+    {
+        $this->container['deployment_stage'] = $deployment_stage;
+
+        return $this;
+    }
+
+    /**
      * Gets context_env_name
      * @return string
      */
@@ -474,12 +564,33 @@ class AppEvent implements ArrayAccess
 
     /**
      * Sets context_env_name
-     * @param string $context_env_name (optional) one of 'development','staging','production' or a custom string
+     * @param string $context_env_name (optional) environment name (like 'cpython' or 'ironpython' etc.)
      * @return $this
      */
     public function setContextEnvName($context_env_name)
     {
         $this->container['context_env_name'] = $context_env_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets context_env_language
+     * @return string
+     */
+    public function getContextEnvLanguage()
+    {
+        return $this->container['context_env_language'];
+    }
+
+    /**
+     * Sets context_env_language
+     * @param string $context_env_language (optional) language (like 'python' or 'c#' etc.)
+     * @return $this
+     */
+    public function setContextEnvLanguage($context_env_language)
+    {
+        $this->container['context_env_language'] = $context_env_language;
 
         return $this;
     }

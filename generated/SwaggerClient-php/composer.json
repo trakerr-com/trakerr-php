@@ -27,9 +27,9 @@
         "squizlabs/php_codesniffer": "~2.6"
     },
     "autoload": {
-        "psr-4": { "trakerr\\client\\" : [ "lib/", "generated/lib/"] }
+        "psr-4": { "trakerr\\client\\" : "lib/" }
     },
     "autoload-dev": {
-        "psr-4": { "trakerr\\client\\" : [ "test/", "generated/test/" ] }
+        "psr-4": { "trakerr\\client\\" : "test/" }
     }
 }
