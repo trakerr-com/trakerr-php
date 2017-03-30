@@ -2,8 +2,14 @@
 
 require_once(__DIR__ . '/autoload.php');
 
+$api_key = "your api key here";
+
+if ($argc > 1 && $api_key === "your api key here"){
+    $api_key = $argv[1];
+}
+
 // initialize the client
-$trakerrClient = new \trakerr\TrakerrClient("db91c9dd3cf14c8ce437be1198665d2919713209848755", null);
+$trakerrClient = new \trakerr\TrakerrClient($api_key, null);
 
 // Option-2: catch and send error to Trakerr programmatically
 try {
