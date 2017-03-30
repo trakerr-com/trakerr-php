@@ -48,19 +48,20 @@ use trakerr\client\model\Error;
 class TrakerrClient
 {
 
-    protected $eventsApi;
-    protected $apiKey;
-    protected $url;
-    protected $contextAppVersion;
-    protected $contextEnvName;
-    protected $contextEnvVersion;
-    protected $contextEnvHostname;
-    protected $contextAppOS;
-    protected $contextAppOSVersion;
-    protected $contextAppBrowser;
-    protected $contextAppBrowserVersion;
-    protected $contextDataCenter;
-    protected $contextDataCenterRegion;
+    private $eventsApi;
+    private $apiKey;
+    private $contextAppVersion;
+    private $contextDeploymentStage;
+    private $contextEnvLanguage;
+    private $contextEnvName;
+    private $contextEnvVersion;
+    private $contextEnvHostname;
+    private $contextAppOS;
+    private $contextAppOSVersion;
+    private $contextAppBrowser;
+    private $contextAppBrowserVersion;
+    private $contextDataCenter;
+    private $contextDataCenterRegion;
     private $errorHelper;
 
     /**
@@ -70,23 +71,21 @@ class TrakerrClient
      * @param string $contextAppVersion (optional) application version, defaults to 1.0
      * @param string $contextEnvName (optional) environment name like "development", "staging", "production" or a custom string
      */
-    public function __construct($apiKey = null, $contextAppVersion = "1.0", $contextEnvName = "development")
+    public function __construct($apiKey = null, $contextAppVersion = "1.0", $contextDeploymentStage = "development")
     {
         $this->apiKey = $apiKey;
-        $this->url = $url;
         $this->contextAppVersion = is_null($contextAppVersion) ? "1.0" : $contextAppVersion;
-        $this->contextEnvName = is_null($contextEnvName) ? "development" : $contextEnvName;
-        $this->contextEnvVersion = $contextEnvVersion;
-        $this->contextEnvHostname = $contextEnvHostname;
-        $this->contextAppOS = is_null($contextAppOS) ? php_uname("s") : $contextAppOS;
-        $this->contextAppOSVersion = is_null($contextAppOSVersion) ? php_uname("v") : $contextAppOSVersion;
-        $this->contextDataCenter = $contextDataCenter;
-        $this->contextDataCenterRegion = $contextDataCenterRegion;
+        $this->contextDeploymentStage = is_null($contextDeploymentStage) ? "development" : $contextDeploymentStage;
+        $this->contextEnvLangugage = "php";
+        $this->contextEnvName = "php";
+        $this->contextEnvVersion = PHP_VERSION;
+        $this->contextEnvHostname = gethostname();
+        $this->contextAppOS = php_uname("s");
+        $this->contextAppOSVersion = php_uname("v");
+        $this->contextDataCenter;
+        $this->contextDataCenterRegion;
 
         $apiClient = new ApiClient();
-        if (!is_null($url)) {
-            $apiClient->getConfig()->setHost($url);
-        }
         $this->eventsApi = new EventsApi($apiClient);
         $this->errorHelper = new ErrorHelper($this);
     }
@@ -97,10 +96,10 @@ class TrakerrClient
      * @param string $eventMessage event message
      * @return mixed
      */
-    public function createAppEvent($classification = "Error", $eventType = "unknown", $eventMessage = "unknown")
+    public function createAppEvent($log_level = "error", $classification = "issue", $eventType = "unknown", $eventMessage = "unknown")
     {
 
-        return $this->fillDefaults(new AppEvent(array("classification" => $classification, "event_type" => $eventType, "event_message" => $eventMessage)));
+        return $this->fillDefaults(new AppEvent(array("log_level" => $log_level, "classification" => $classification, "event_type" => $eventType, "event_message" => $eventMessage)));
     }
 
     /**
@@ -111,9 +110,9 @@ class TrakerrClient
      * @param string $eventMessage event message
      * @return mixed
      */
-    public function createAppEventFromException($classification = "Error", Exception $exc)
+    public function createAppEventFromException(Exception $exc, $log_level = "error", $classification = "issue")
     {
-        $appEvent = $this->errorHelper->createAppEvent($classification, $exc);
+        $appEvent = $this->errorHelper->createAppEvent($exc, $log_level, $classification);
         return $this->fillDefaults($appEvent);
     }
 
@@ -134,9 +133,9 @@ class TrakerrClient
      * @param $classification classification like "Error", "Warning", "Info" etc.
      * @param $exc exception
      */
-    public function sendError($classification, Exception $exc)
+    public function sendError(Exception $exc, $log_level = "error", $classification = "issue")
     {
-        $appEvent = $this->errorHelper->createAppEvent($classification, $exc);
+        $appEvent = $this->errorHelper->createAppEvent($exc, $log_level, $classification);
         $data = $this->fillDefaults($appEvent);
         return $this->eventsApi->eventsPost($data);
     }
@@ -202,7 +201,7 @@ class TrakerrClient
     public function set_apikey($apikey)
     {
         if (!is_string($apikey)) {
-            throw new InvalidArgumentException('tripleInteger function only accepts integers.');
+            throw new \InvalidArgumentException('tripleInteger function only accepts integers.');
         }
         $this->apiKey = $apikey;
     }
@@ -215,9 +214,22 @@ class TrakerrClient
     public function set_contextAppVersion($contextappversion)
     {
         if (!is_string($contextappversion)) {
-            throw new InvalidArgumentException('Function only accepts strings.');
+            throw new \InvalidArgumentException('Function only accepts strings.');
         }
         $this->contextAppVersion = $contextappversion;
+    }
+
+    public function set_contextDeploymentStage($contextdeploymentstage)
+    {
+        if (!is_string($contextdeploymentstage)) {
+            throw new \InvalidArgumentException('Function only accepts strings.');
+        }
+        $this->contextDeploymentStage = $contextdeploymentstage;
+    }
+
+    public function get_contextDeploymentStage()
+    {
+        return $this->contextDeploymentStage;
     }
 
     public function get_contextAppVersion()
@@ -225,10 +237,23 @@ class TrakerrClient
         return $this->contextAppVersion;
     }
 
+    public function set_contextEnvLanguage($contextenvlanguage)
+    {
+        if (!is_string($contextenvlanguage)) {
+            throw new \InvalidArgumentException('Function only accepts strings.');
+        }
+        $this->contextEnvLanguage = $contextenvlanguage;
+    }
+
+    public function get_contextEnvLanguage()
+    {
+        return $this->contextEnvLanguage;
+    }
+
     public function set_contextEnvName($contextenvname)
     {
         if (!is_string($contextenvname)) {
-            throw new InvalidArgumentException('Function only accepts strings.');
+            throw new \InvalidArgumentException('Function only accepts strings.');
         }
         $this->contextEnvName = $contextenvname;
     }
@@ -241,7 +266,7 @@ class TrakerrClient
     public function set_contextEnvVersion($contextenvversion)
     {
         if (!is_string($contextenvversion)) {
-            throw new InvalidArgumentException('Function only accepts strings.');
+            throw new \InvalidArgumentException('Function only accepts strings.');
         }
         $this->contextEnvVersion = $contextenvversion;
     }
@@ -254,7 +279,7 @@ class TrakerrClient
     public function set_contextEnvHostname($contextenvhostname)
     {
         if (!is_string($contextenvhostname)) {
-            throw new InvalidArgumentException('Function only accepts strings.');
+            throw new \InvalidArgumentException('Function only accepts strings.');
         }
         $this->contextEnvHostname = $contextenvhostname;
     }
@@ -267,7 +292,7 @@ class TrakerrClient
     public function set_contextAppOS($contextappos)
     {
         if (!is_string($contextappos)) {
-            throw new InvalidArgumentException('Function only accepts strings.');
+            throw new \InvalidArgumentException('Function only accepts strings.');
         }
         $this->contextAppOS = $contextappos;
     }
@@ -280,7 +305,7 @@ class TrakerrClient
     public function set_contextAppOSVersion($contextapposversion)
     {
         if (!is_string($contextapposversion)) {
-            throw new InvalidArgumentException('Function only accepts strings.');
+            throw new \InvalidArgumentException('Function only accepts strings.');
         }
         $this->contextAppOSVersion = $contextapposversion;
     }
@@ -293,7 +318,7 @@ class TrakerrClient
     public function set_contextAppBrowser($contextappbrowser)
     {
         if (!is_string($contextappbrowser)) {
-            throw new InvalidArgumentException('Function only accepts strings.');
+            throw new \InvalidArgumentException('Function only accepts strings.');
         }
         $this->contextAppBrowser = $contextappbrowser;
     }
@@ -306,7 +331,7 @@ class TrakerrClient
     public function set_contextAppBrowserVersion($contextappbrowserversion)
     {
         if (!is_string($contextappbrowserversion)) {
-            throw new InvalidArgumentException('Function only accepts strings.');
+            throw new \InvalidArgumentException('Function only accepts strings.');
         }
         $this->contextAppBrowserVersion = $contextappbrowserversion;
     }
@@ -319,7 +344,7 @@ class TrakerrClient
     public function set_contextDataCenter($contextdatacenter)
     {
         if (!is_string($contextdatacenter)) {
-            throw new InvalidArgumentException('Function only accepts strings.');
+            throw new \InvalidArgumentException('Function only accepts strings.');
         }
         $this->contextDataCenter = $contextdatacenter;
     }
@@ -332,7 +357,7 @@ class TrakerrClient
     public function set_contextDataCenterRegion($contextdatacenterregion)
     {
         if (!is_string($contextdatacenterregion)) {
-            throw new InvalidArgumentException('Function only accepts strings.');
+            throw new \InvalidArgumentException('Function only accepts strings.');
         }
         $this->contextDataCenterRegion = $contextdatacenterregion;
     }
