@@ -78,7 +78,7 @@ class TrakerrClient
         $this->contextDeploymentStage = is_null($contextDeploymentStage) ? "development" : $contextDeploymentStage;
         $this->contextEnvLangugage = "php";
         $this->contextEnvName = "php";
-        $this->contextEnvVersion = PHP_VERSION;
+        $this->contextEnvVersion = PHP_VERSION_ID;
         $this->contextEnvHostname = gethostname();
         $this->contextAppOS = php_uname("s");
         $this->contextAppOSVersion = php_uname("v");
