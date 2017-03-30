@@ -82,8 +82,10 @@ class TrakerrClient
         $this->contextEnvHostname = gethostname();
         $this->contextAppOS = php_uname("s");
         $this->contextAppOSVersion = php_uname("v");
-        $this->contextDataCenter;
-        $this->contextDataCenterRegion;
+        $this->contextAppBrowser = NULL;
+        $this->contextAppBrowserVersion = NULL;
+        $this->contextDataCenter = NULL;
+        $this->contextDataCenterRegion = NULL;
 
         $apiClient = new ApiClient();
         $this->eventsApi = new EventsApi($apiClient);
@@ -151,33 +153,51 @@ class TrakerrClient
     private function fillDefaults(AppEvent $appEvent)
     {
         if (is_null($appEvent->getApiKey())) {
-            $appEvent->setApiKey($this->apiKey);
+            $appEvent->setApiKey($this->getApiKey());
         }
 
         if (is_null($appEvent->getContextAppVersion())) {
-            $appEvent->setContextAppVersion($this->contextAppVersion);
+            $appEvent->setContextAppVersion($this->getContextAppVersion());
+        }
+
+        if (is_null($appEvent->getDeploymentStage())){
+            $appEvent->setDeploymentStage($this->getContextDeploymentStage());
+        }
+
+        if (is_null($appEvent->getContextEnvLanguage())){
+            $appEvent->setContextEnvLanguage($this->getContextEnvLanguage());
         }
 
         if (is_null($appEvent->getContextEnvName())) {
-            $appEvent->setContextEnvName($this->contextEnvName);
+            $appEvent->setContextEnvName($this->getContextEnvName());
         }
+
         if (is_null($appEvent->getContextEnvVersion())) {
-            $appEvent->setContextEnvVersion($this->contextEnvVersion);
+            $appEvent->setContextEnvVersion($this->getContextEnvVersion());
         }
+
         if (is_null($appEvent->getContextEnvHostname())) {
-            $appEvent->setContextEnvHostname($this->contextEnvHostname);
+            $appEvent->setContextEnvHostname($this->getContextEnvHostname());
         }
 
         if (is_null($appEvent->getContextAppOS())) {
-            $appEvent->setContextAppOS($this->contextAppOS);
-            $appEvent->setContextAppOSVersion($this->contextAppOSVersion);
+            $appEvent->setContextAppOS($this->getContextAppOS());
+            $appEvent->setContextAppOSVersion($this->getContextAppOSVersion());
+        }
+
+        if (is_null($appEvent->getContextAppBrowser())){
+            $appEvent->setContextAppBrowser($this->getContextAppBrowser());
+        }
+
+        if (is_null($appEvent->getContextAppBrowserVersion())){
+            $appEvent->setContextAppBrowserVersion($this->getContextAppBrowserVersion());
         }
 
         if (is_null($appEvent->getContextDataCenter())) {
-            $appEvent->setContextDataCenter($this->contextDataCenter);
+            $appEvent->setContextDataCenter($this->getContextDataCenter());
         }
         if (is_null($appEvent->getContextDataCenterRegion())) {
-            $appEvent->setContextDataCenterRegion($this->contextDataCenterRegion);
+            $appEvent->setContextDataCenterRegion($this->getContextDataCenterRegion());
         }
 
         if (is_null($appEvent->getEventTime())) {
@@ -198,7 +218,7 @@ class TrakerrClient
 
     //Accessor list:
 
-    public function set_apikey($apikey)
+    public function setApiKey($apikey)
     {
         if (!is_string($apikey)) {
             throw new \InvalidArgumentException('tripleInteger function only accepts integers.');
@@ -206,12 +226,12 @@ class TrakerrClient
         $this->apiKey = $apikey;
     }
 
-    public function get_apikey()
+    public function getApiKey()
     {
         return $this->apiKey;
     }
 
-    public function set_contextAppVersion($contextappversion)
+    public function setContextAppVersion($contextappversion)
     {
         if (!is_string($contextappversion)) {
             throw new \InvalidArgumentException('Function only accepts strings.');
@@ -219,7 +239,7 @@ class TrakerrClient
         $this->contextAppVersion = $contextappversion;
     }
 
-    public function set_contextDeploymentStage($contextdeploymentstage)
+    public function setContextDeploymentStage($contextdeploymentstage)
     {
         if (!is_string($contextdeploymentstage)) {
             throw new \InvalidArgumentException('Function only accepts strings.');
@@ -227,17 +247,17 @@ class TrakerrClient
         $this->contextDeploymentStage = $contextdeploymentstage;
     }
 
-    public function get_contextDeploymentStage()
+    public function getContextDeploymentStage()
     {
         return $this->contextDeploymentStage;
     }
 
-    public function get_contextAppVersion()
+    public function getContextAppVersion()
     {
         return $this->contextAppVersion;
     }
 
-    public function set_contextEnvLanguage($contextenvlanguage)
+    public function setContextEnvLanguage($contextenvlanguage)
     {
         if (!is_string($contextenvlanguage)) {
             throw new \InvalidArgumentException('Function only accepts strings.');
@@ -245,12 +265,12 @@ class TrakerrClient
         $this->contextEnvLanguage = $contextenvlanguage;
     }
 
-    public function get_contextEnvLanguage()
+    public function getContextEnvLanguage()
     {
         return $this->contextEnvLanguage;
     }
 
-    public function set_contextEnvName($contextenvname)
+    public function setContextEnvName($contextenvname)
     {
         if (!is_string($contextenvname)) {
             throw new \InvalidArgumentException('Function only accepts strings.');
@@ -258,12 +278,12 @@ class TrakerrClient
         $this->contextEnvName = $contextenvname;
     }
 
-    public function get_contextEnvName()
+    public function getContextEnvName()
     {
         return $this->contextEnvName;
     }
 
-    public function set_contextEnvVersion($contextenvversion)
+    public function setContextEnvVersion($contextenvversion)
     {
         if (!is_string($contextenvversion)) {
             throw new \InvalidArgumentException('Function only accepts strings.');
@@ -271,12 +291,12 @@ class TrakerrClient
         $this->contextEnvVersion = $contextenvversion;
     }
 
-    public function get_contextEnvVersion()
+    public function getContextEnvVersion()
     {
         return $this->contextEnvVersion;
     }
 
-    public function set_contextEnvHostname($contextenvhostname)
+    public function setContextEnvHostname($contextenvhostname)
     {
         if (!is_string($contextenvhostname)) {
             throw new \InvalidArgumentException('Function only accepts strings.');
@@ -284,12 +304,12 @@ class TrakerrClient
         $this->contextEnvHostname = $contextenvhostname;
     }
 
-    public function get_contextEnvHostname()
+    public function getContextEnvHostname()
     {
         return $this->contextEnvHostname;
     }
 
-    public function set_contextAppOS($contextappos)
+    public function setContextAppOS($contextappos)
     {
         if (!is_string($contextappos)) {
             throw new \InvalidArgumentException('Function only accepts strings.');
@@ -297,12 +317,12 @@ class TrakerrClient
         $this->contextAppOS = $contextappos;
     }
 
-    public function get_contextAppOS()
+    public function getContextAppOS()
     {
         return $this->contextAppOS;
     }
 
-    public function set_contextAppOSVersion($contextapposversion)
+    public function setContextAppOSVersion($contextapposversion)
     {
         if (!is_string($contextapposversion)) {
             throw new \InvalidArgumentException('Function only accepts strings.');
@@ -310,12 +330,12 @@ class TrakerrClient
         $this->contextAppOSVersion = $contextapposversion;
     }
 
-    public function get_contextAppOSVersion()
+    public function getContextAppOSVersion()
     {
         return $this->contextAppOSVersion;
     }
 
-    public function set_contextAppBrowser($contextappbrowser)
+    public function setContextAppBrowser($contextappbrowser)
     {
         if (!is_string($contextappbrowser)) {
             throw new \InvalidArgumentException('Function only accepts strings.');
@@ -323,12 +343,12 @@ class TrakerrClient
         $this->contextAppBrowser = $contextappbrowser;
     }
 
-    public function get_contextAppBrowser()
+    public function getContextAppBrowser()
     {
         return $this->contextAppBrowser;
     }
 
-    public function set_contextAppBrowserVersion($contextappbrowserversion)
+    public function setContextAppBrowserVersion($contextappbrowserversion)
     {
         if (!is_string($contextappbrowserversion)) {
             throw new \InvalidArgumentException('Function only accepts strings.');
@@ -336,12 +356,12 @@ class TrakerrClient
         $this->contextAppBrowserVersion = $contextappbrowserversion;
     }
 
-    public function get_contextAppBrowserVersion()
+    public function getContextAppBrowserVersion()
     {
         return $this->contextAppBrowserVersion;
     }
 
-    public function set_contextDataCenter($contextdatacenter)
+    public function setContextDataCenter($contextdatacenter)
     {
         if (!is_string($contextdatacenter)) {
             throw new \InvalidArgumentException('Function only accepts strings.');
@@ -349,12 +369,12 @@ class TrakerrClient
         $this->contextDataCenter = $contextdatacenter;
     }
 
-    public function get_contextDataCenter()
+    public function getContextDataCenter()
     {
         return $this->contextDataCenter;
     }
 
-    public function set_contextDataCenterRegion($contextdatacenterregion)
+    public function setContextDataCenterRegion($contextdatacenterregion)
     {
         if (!is_string($contextdatacenterregion)) {
             throw new \InvalidArgumentException('Function only accepts strings.');
@@ -362,7 +382,7 @@ class TrakerrClient
         $this->contextDataCenterRegion = $contextdatacenterregion;
     }
 
-    public function get_contextDataCenterRegion()
+    public function getContextDataCenterRegion()
     {
         return $this->contextDataCenterRegion;
     }
