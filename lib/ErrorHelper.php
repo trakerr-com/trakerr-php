@@ -55,9 +55,9 @@ class ErrorHelper
      * @param $exc Exception to be parsed.
      * @return AppEvent instance which has the StackTrace, classification, name, and message set.
      */
-    public function createAppEvent($classification, Exception $exc)
+    public function createAppEvent(Exception $exc, $log_level="error", $classification="issue")
     {
-        $appEvent = $this->trakerrClient->createAppEvent($classification, get_class($exc), $exc->getMessage());
+        $appEvent = $this->trakerrClient->createAppEvent($log_level, $classification, get_class($exc), $exc->getMessage());
         $appEvent->setEventStacktrace($this->createStacktrace(array(), $exc));
         return $appEvent;
     }
@@ -132,24 +132,24 @@ class ErrorHelper
         switch ($code) {
             case E_NOTICE:
             case E_USER_NOTICE:
-                $classification = "Info";
+                $stage = "Info";
                 break;
             case E_WARNING:
             case E_USER_WARNING:
-                $classification = "Warning";
+                $stage = "Warning";
                 break;
             case E_ERROR:
             case E_CORE_ERROR:
             case E_RECOVERABLE_ERROR:
-                $classification = "Error";
+                $stage = "Error";
                 break;
             case E_USER_ERROR:
             default:
-                $classification = "Fatal";
+                $stage = "Fatal";
                 break;
         }
 
-        $appEvent = $this->buildAppEvent($classification, $exc);
+        $appEvent = $this->createAppEvent($exc, $stage);
         $this->trakerrClient->sendEvent($appEvent);
     }
 
@@ -160,7 +160,7 @@ class ErrorHelper
      */
     public function onException($exc)
     {
-        $appEvent = $this->buildAppEvent("Error", $exc);
+        $appEvent = $this->createAppEvent($exc, "Error");
         $this->trakerrClient->sendEvent($appEvent);
     }
 
@@ -177,7 +177,7 @@ class ErrorHelper
             return;
         }
 
-        $appEvent = $this->buildAppEvent("Fatal", new Exception($error['message']));
+        $appEvent = $this->createAppEvent(new Exception($error['message']), "Fatal");
         $this->trakerrClient->sendEvent($appEvent);
     }
 
