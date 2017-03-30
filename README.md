@@ -33,7 +33,7 @@ Then run `composer install`
 Download the files and include `autoload.php`:
 
 ```php
-    require_once(__DIR__ . '/vendor/autoload.php');
+    require_once(__DIR__ . '/../autoload.php');
 ```
 
 ## Getting Started
@@ -44,7 +44,7 @@ Please follow the [installation procedure](#installation--usage) and then run th
 
 ```php
     // initialize the client
-    $trakerrClient = new \trakerr\TrakerrClient("<REPLACE WITH API KEY>", null);
+    $trakerrClient = new \trakerr\TrakerrClient("<REPLACE WITH API KEY>", Null);
 ```
 
 ### Option-1: Registering global error handlers
@@ -52,6 +52,8 @@ Please follow the [installation procedure](#installation--usage) and then run th
 ```php
     // Option-1: register global exception handlers (optional)
     $trakerrClient->registerErrorHandlers();
+
+    throw new Exception("Not enough math");
 ```
 
 ### Option-2: Sent event programmatically
@@ -60,8 +62,8 @@ Please follow the [installation procedure](#installation--usage) and then run th
     // Option-2: catch and send error to Trakerr programmatically
     try {
         throw new Exception("test exception");
-    } catch(Exception $e) {
-        $trakerr_client->sendError("Error", $e);
+    } catch (Exception $e) {
+        $trakerrClient->sendError($e, "fatal");
     }
 ```
 
@@ -73,61 +75,57 @@ Please follow the [installation procedure](#installation--usage) and then run th
     use trakerr\client\model\CustomStringData;
 
     try {
-    } catch(Exception $e) {
-        // this is just an example
-        // declare and initialize this client in your code and re-use it for multiple events
-        // do not create it at the time you want to send the event
-        $trakerr_client = new \trakerr\TrakerrClient("<REPLACE WITH API KEY>", null);
-        $appEvent = $trakerr_client->createAppEventFromException("Error", $e);
+        throw new Exception("Too much math");
+    } catch (Exception $e) {
+        $appEvent2 = $trakerrClient->createAppEventFromException($e, "Error");
 
         // set some custom data
         $customProperties = new CustomData();
         $customStringData = new CustomStringData();
         $customStringData->setCustomData1("Some custom data");
         $customProperties->setStringData($customStringData);
-        $appEvent->setCustomProperties($customProperties);
+        $appEvent2->setCustomProperties($customProperties);
 
-        $trakerr_client->sendEvent($appEvent);
+        $trakerrClient->sendEvent($appEvent2);
     }
 ```
 
 ### Option-4: Create an event (eg. non-exception) and send it to Trakerr
 
 ```php
-    // Option-4: send any event programmatically
-    $appEvent = $trakerr_client->createAppEvent("Error", "TestType", "Test message from php");
+     // Option-4: send any event programmatically
+    $appEvent = $trakerrClient->createAppEvent("warning", "type warn", "TestType", "Test message from php");
 
-    $trakerr_client->sendEvent($appEvent);
+    $trakerrClient->sendEvent($appEvent);
 ```
 
-## About the php constructor
+## About TrakerrClient's properties
 The `TrakerrClient` class above can be constructed to take aditional data, rather than using the configured defaults. The constructor signature is:
 
 ```php
-public function __construct($apiKey = null, $url = null, $contextAppVersion = "1.0",
-$contextEnvName = "development", $contextEnvVersion = null, $contextEnvHostname = null, $contextAppOS = null,
-$contextAppOSVersion = null, $contextDataCenter = null, $contextDataCenterRegion = null)
+public function __construct($apiKey = Null, $contextAppVersion = "1.0",
+$contextDeploymentStage = "development")
 ```
-
-Some of the arguments have default values when passed in null. Below is a list of the arguments, and what Trakerr expects so you can pass in custom data.
+The TrakerrClient class however has a lot of exposed properties. The benefit to setting these immediately after after you create the TrakerrClient is that AppEvent will default it's values against the TrakerClient that created it. This way if there is a value that all your AppEvents uses, and the constructor default value currently doesn't suit you; it may be easier to change it in TrakerrClient as it will become the default value for all AppEvents created after. A lot of these are populated by default value by the constructor, but you can populate them with whatever string data you want. The following table provides an in depth look at each of those.
 
 Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**apiKey** | **str** | API Key for the application. | [Required]
-**url** | **str** | (optional) URL to Trakerr, specify null to use default. | [Optional if set to `null`] Defaults to reading url property under appSettings from the configuration.php.
-**contextAppVersion** | **str** | (optional) Application version, defaults to 1.0. | [Optional if set to `null`] Defaults to "1.0".
-**contextEnvName** | **str** | (optional) Environment name like "development", "staging", "production" or a custom string. | [Optional if set to `null`] Defaults to "develoment".
-**contextEnvVersion** | **str** | (optional) Environment version. | [Optional if set to `null`] Defaults to `null`. 
-**contextEnvHostname** | **str** | (optional) Environment hostname. | [Optional if set to `null`] Defaults to `null`.
-**contextAppOS** | **str** | (optional) Operating system. | [Optional if set to `null`] Defaults to `php_uname("s")`
-**contextAppOSVersion** | **str** | (optional)  Operating system version. | [Optional if set to `null`] Defaults to `php_uname("v")`.
-**contextDataCenter** | **str** | (optional) Provide a datacenter name. | [Optional if set to `null`] Defaults to `null`.
-**contextDataCenterRegion** | **str** | (optional) Provide a datacenter region. | [Optional if set to `null`] Defaults to `null`.
+------------ | ------------- | -------------  | -------------
+**apiKey** | **string**  | API Key for your application. |
+**contextAppVersion** | **string** | Provide the application version. | Default Value: "1.0"
+**contextDevelopmentStage** | **string** | One of development, staging, production; or a custom string. | Default Value: "development"
+**contextEnvLanguage** | **string** | Constant string representing the language the application is in. | Default value: "php".
+**contextEnvName** | **string** | Name of the CLR the program is running on | Defaults value: "php"
+**contextEnvVersion** | **string** | Provide an environment version. | Defaults Value: `PHP_VERSION_ID`.
+**contextEnvHostname** | **string** | Provide the current hostname. | Defaults Value: `gethostname()`.
+**contextAppOS** | **string** | Provide an operating system name. | Defaults Value: `php_uname("s")`.
+**contextAppOSVersion** | **string** | Provide an operating system version. | Default Value: `php_uname("v")`.
+**contextAppOSBrowser** | **string** | An optional string browser name the application is running on. | Defaults to `Null`
+**contextAppOSBrowserVersion** | **string** | An optional string browser version the application is running on. | Defaults to `Null`
+**contextDataCenter** | **string** | Data center the application is running on or connected to. | Defaults to `Null`
+**contextDataCenterRegion** | **string** | Data center region. | Defaults to `Null`
 
-If you want to use a default value in a custom call, simply pass in `null` to the argument, and it will be filled with the default value.
 
 ## Documentation For Models
-
  - [AppEvent](https://github.com/trakerr-io/trakerr-php/blob/master/generated/SwaggerClient-php/docs/Model/AppEvent.md)
 
 
