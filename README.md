@@ -1,18 +1,14 @@
 # trakerr-php API client
 Get your application events and errors to Trakerr via the *Trakerr Client*.
 
-- API version: 1.0.0
-
 ## Requirements
-
 PHP 5.4.0 and later
 
-## Installation & Usage
-### Composer
+## 3-minute Integration Guide
 
-To install the bindings via [Composer](http://getcomposer.org/), add the following to `composer.json`:
+Install the bindings via [Composer](http://getcomposer.org/), add the following to `composer.json`:
 
-```
+```json
 {
   "repositories": [
     {
@@ -26,48 +22,44 @@ To install the bindings via [Composer](http://getcomposer.org/), add the followi
 }
 ```
 
-Then run `composer install`
+Then run `composer install`. This should make it easy to keep the API up to date.
 
-### Manual Installation
-
-Download the files and include `autoload.php`:
+If you are not using composer download all the files and include `autoload.php`:
 
 ```php
-    require_once(__DIR__ . '/../autoload.php');
+require_once(__DIR__ . '/../autoload.php');
 ```
 
-## Getting Started
-
-Please follow the [installation procedure](#installation--usage) and then run the following:
-
-### Create the Trakerr client first
+Finally, in your code call: 
 
 ```php
-    // initialize the client
-    $trakerrClient = new \trakerr\TrakerrClient("<REPLACE WITH API KEY>", Null);
+$trakerrClient = new \trakerr\TrakerrClient("<REPLACE WITH API KEY>", "App version here", "Deployment stage here");
+$trakerrClient->registerErrorHandlers();
 ```
 
-### Option-1: Registering global error handlers
+That should activate a global error handler for you to use.
+## Detailed Integration Guide
+###Installation
+Please follow the [three minute guide](#3-minute-Integration-Guide) for supported installation instructions.
 
-```php
-    // Option-1: register global exception handlers (optional)
-    $trakerrClient->registerErrorHandlers();
-
-    throw new Exception("Not enough math");
-```
+### Option-1: Register global event handler
+This example was also covered above, in the [three minute guide](#3-minute-Integration-guide)
 
 ### Option-2: Sent event programmatically
+Send an event to trackerr within a try catch to handle an event while sending it to trakerr. Simply call send error from catch statement, and pass in an error and the loglevel and classification.
 
 ```php
+$trakerrClient = new \trakerr\TrakerrClient("<REPLACE WITH API KEY>", "App version here", "Deployment stage here");
     // Option-2: catch and send error to Trakerr programmatically
-    try {
-        throw new Exception("test exception");
-    } catch (Exception $e) {
-        $trakerrClient->sendError($e, "fatal");
-    }
+try {
+    throw new Exception("test exception");
+} catch (Exception $e) {
+    $trakerrClient->sendError($e, "fatal");
+}
 ```
 
 ### Option-3: Send event programmatically but with custom properties
+You can send custom properties from an event which is being handled. Create a new AppEvent through the APIand populate the instance with the custom data that you want. Be sure to send the event to trakerr after you are done!
 
 ```php
     // Option-3: catch and send error to Trakerr with some custom data programmatically
@@ -91,6 +83,7 @@ Please follow the [installation procedure](#installation--usage) and then run th
 ```
 
 ### Option-4: Create an event (eg. non-exception) and send it to Trakerr
+Trakerr accepts non errors and application events. We suggest that you send the user and session, along with setting the event name, message, at the least before sending it to Trakerr.
 
 ```php
      // Option-4: send any event programmatically
@@ -103,7 +96,7 @@ Please follow the [installation procedure](#installation--usage) and then run th
 The `TrakerrClient` class above can be constructed to take aditional data, rather than using the configured defaults. The constructor signature is:
 
 ```php
-public function __construct($apiKey = Null, $contextAppVersion = "1.0",
+public function __construct($apiKey, $contextAppVersion = "1.0",
 $contextDeploymentStage = "development")
 ```
 The TrakerrClient class however has a lot of exposed properties. The benefit to setting these immediately after after you create the TrakerrClient is that AppEvent will default it's values against the TrakerClient that created it. This way if there is a value that all your AppEvents uses, and the constructor default value currently doesn't suit you; it may be easier to change it in TrakerrClient as it will become the default value for all AppEvents created after. A lot of these are populated by default value by the constructor, but you can populate them with whatever string data you want. The following table provides an in depth look at each of those.

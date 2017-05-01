@@ -71,7 +71,7 @@ class TrakerrClient
      * @param string $contextAppVersion (optional) application version, defaults to 1.0
      * @param string $contextEnvName (optional) environment name like "development", "staging", "production" or a custom string
      */
-    public function __construct($apiKey = null, $contextAppVersion = "1.0", $contextDeploymentStage = "development")
+    public function __construct($apiKey, $contextAppVersion = "1.0", $contextDeploymentStage = "development")
     {
         $this->apiKey = $apiKey;
         $this->contextAppVersion = is_null($contextAppVersion) ? "1.0" : $contextAppVersion;

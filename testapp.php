@@ -9,7 +9,7 @@ if ($argc > 1 && $api_key === "your api key here"){
 }
 
 // initialize the client
-$trakerrClient = new \trakerr\TrakerrClient($api_key, null);
+$trakerrClient = new \trakerr\TrakerrClient($api_key, "1.0", "development");
 
 // Option-2: catch and send error to Trakerr programmatically
 try {
