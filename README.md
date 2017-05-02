@@ -1,4 +1,4 @@
-# trakerr-php API client
+# Trakerr - PHP API client
 Get your application events and errors to Trakerr via the *Trakerr Client*.
 
 ## Requirements
@@ -104,10 +104,10 @@ The TrakerrClient class however has a lot of exposed properties. The benefit to 
 Name | Type | Description | Notes
 ------------ | ------------- | -------------  | -------------
 **apiKey** | **string**  | API Key for your application. |
-**contextAppVersion** | **string** | Provide the application version. | Default Value: "1.0"
-**contextDevelopmentStage** | **string** | One of development, staging, production; or a custom string. | Default Value: "development"
-**contextEnvLanguage** | **string** | Constant string representing the language the application is in. | Default value: "php".
-**contextEnvName** | **string** | Name of the CLR the program is running on | Defaults value: "php"
+**contextAppVersion** | **string** | Provide the application version. | Default Value: `1.0`
+**contextDevelopmentStage** | **string** | One of development, staging, production; or a custom string. | Default Value: `development`
+**contextEnvLanguage** | **string** | Constant string representing the language the application is in. | Default value: `php`.
+**contextEnvName** | **string** | Name of the CLR the program is running on | Defaults value: `php`
 **contextEnvVersion** | **string** | Provide an environment version. | Defaults Value: `PHP_VERSION_ID`.
 **contextEnvHostname** | **string** | Provide the current hostname. | Defaults Value: `gethostname()`.
 **contextAppOS** | **string** | Provide an operating system name. | Defaults Value: `php_uname("s")`.
