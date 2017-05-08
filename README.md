@@ -33,7 +33,7 @@ require_once(__DIR__ . '/../autoload.php');
 Finally, in your code call: 
 
 ```php
-$trakerrClient = new \trakerr\TrakerrClient("<REPLACE WITH API KEY>", "App version here", "Deployment stage here");
+$trakerrClient = new \trakerr\TrakerrClient("<api-key>", "App version here", "Deployment stage here");
 $trakerrClient->registerErrorHandlers();
 ```
 
@@ -49,7 +49,7 @@ This example was also covered above, in the [three minute guide](#3-minute-Integ
 Send an event to trackerr within a try catch to handle an event while sending it to trakerr. Simply call send error from catch statement, and pass in an error and the loglevel and classification.
 
 ```php
-$trakerrClient = new \trakerr\TrakerrClient("<REPLACE WITH API KEY>", "App version here", "Deployment stage here");
+$trakerrClient = new \trakerr\TrakerrClient("<api-key>", "App version here", "Deployment stage here");
     // Option-2: catch and send error to Trakerr programmatically
 try {
     throw new Exception("test exception");

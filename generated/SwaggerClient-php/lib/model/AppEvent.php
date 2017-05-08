@@ -87,6 +87,14 @@ class AppEvent implements ArrayAccess
         'context_app_os_version' => 'string',
         'context_data_center' => 'string',
         'context_data_center_region' => 'string',
+        'context_tags' => 'string[]',
+        'context_url' => 'string',
+        'context_operation_time_millis' => 'int',
+        'context_cpu_percentage' => 'int',
+        'context_memory_percentage' => 'int',
+        'context_cross_app_correlation_id' => 'string',
+        'context_device' => 'string',
+        'context_app_sku' => 'string',
         'custom_properties' => '\trakerr\client\model\CustomData',
         'custom_segments' => '\trakerr\client\model\CustomData'
     );
@@ -122,6 +130,14 @@ class AppEvent implements ArrayAccess
         'context_app_os_version' => 'contextAppOSVersion',
         'context_data_center' => 'contextDataCenter',
         'context_data_center_region' => 'contextDataCenterRegion',
+        'context_tags' => 'contextTags',
+        'context_url' => 'contextURL',
+        'context_operation_time_millis' => 'contextOperationTimeMillis',
+        'context_cpu_percentage' => 'contextCpuPercentage',
+        'context_memory_percentage' => 'contextMemoryPercentage',
+        'context_cross_app_correlation_id' => 'contextCrossAppCorrelationId',
+        'context_device' => 'contextDevice',
+        'context_app_sku' => 'contextAppSku',
         'custom_properties' => 'customProperties',
         'custom_segments' => 'customSegments'
     );
@@ -157,6 +173,14 @@ class AppEvent implements ArrayAccess
         'context_app_os_version' => 'setContextAppOsVersion',
         'context_data_center' => 'setContextDataCenter',
         'context_data_center_region' => 'setContextDataCenterRegion',
+        'context_tags' => 'setContextTags',
+        'context_url' => 'setContextUrl',
+        'context_operation_time_millis' => 'setContextOperationTimeMillis',
+        'context_cpu_percentage' => 'setContextCpuPercentage',
+        'context_memory_percentage' => 'setContextMemoryPercentage',
+        'context_cross_app_correlation_id' => 'setContextCrossAppCorrelationId',
+        'context_device' => 'setContextDevice',
+        'context_app_sku' => 'setContextAppSku',
         'custom_properties' => 'setCustomProperties',
         'custom_segments' => 'setCustomSegments'
     );
@@ -192,6 +216,14 @@ class AppEvent implements ArrayAccess
         'context_app_os_version' => 'getContextAppOsVersion',
         'context_data_center' => 'getContextDataCenter',
         'context_data_center_region' => 'getContextDataCenterRegion',
+        'context_tags' => 'getContextTags',
+        'context_url' => 'getContextUrl',
+        'context_operation_time_millis' => 'getContextOperationTimeMillis',
+        'context_cpu_percentage' => 'getContextCpuPercentage',
+        'context_memory_percentage' => 'getContextMemoryPercentage',
+        'context_cross_app_correlation_id' => 'getContextCrossAppCorrelationId',
+        'context_device' => 'getContextDevice',
+        'context_app_sku' => 'getContextAppSku',
         'custom_properties' => 'getCustomProperties',
         'custom_segments' => 'getCustomSegments'
     );
@@ -258,6 +290,14 @@ class AppEvent implements ArrayAccess
         $this->container['context_app_os_version'] = isset($data['context_app_os_version']) ? $data['context_app_os_version'] : null;
         $this->container['context_data_center'] = isset($data['context_data_center']) ? $data['context_data_center'] : null;
         $this->container['context_data_center_region'] = isset($data['context_data_center_region']) ? $data['context_data_center_region'] : null;
+        $this->container['context_tags'] = isset($data['context_tags']) ? $data['context_tags'] : null;
+        $this->container['context_url'] = isset($data['context_url']) ? $data['context_url'] : null;
+        $this->container['context_operation_time_millis'] = isset($data['context_operation_time_millis']) ? $data['context_operation_time_millis'] : null;
+        $this->container['context_cpu_percentage'] = isset($data['context_cpu_percentage']) ? $data['context_cpu_percentage'] : null;
+        $this->container['context_memory_percentage'] = isset($data['context_memory_percentage']) ? $data['context_memory_percentage'] : null;
+        $this->container['context_cross_app_correlation_id'] = isset($data['context_cross_app_correlation_id']) ? $data['context_cross_app_correlation_id'] : null;
+        $this->container['context_device'] = isset($data['context_device']) ? $data['context_device'] : null;
+        $this->container['context_app_sku'] = isset($data['context_app_sku']) ? $data['context_app_sku'] : null;
         $this->container['custom_properties'] = isset($data['custom_properties']) ? $data['custom_properties'] : null;
         $this->container['custom_segments'] = isset($data['custom_segments']) ? $data['custom_segments'] : null;
     }
@@ -375,7 +415,7 @@ class AppEvent implements ArrayAccess
 
     /**
      * Sets classification
-     * @param string $classification (optional) one of 'error' or a custom string for non-errors, defaults to 'error'
+     * @param string $classification (optional) one of 'issue' or a custom string for non-issues, defaults to 'issue'
      * @return $this
      */
     public function setClassification($classification)
@@ -759,6 +799,174 @@ class AppEvent implements ArrayAccess
     public function setContextDataCenterRegion($context_data_center_region)
     {
         $this->container['context_data_center_region'] = $context_data_center_region;
+
+        return $this;
+    }
+
+    /**
+     * Gets context_tags
+     * @return string[]
+     */
+    public function getContextTags()
+    {
+        return $this->container['context_tags'];
+    }
+
+    /**
+     * Sets context_tags
+     * @param string[] $context_tags
+     * @return $this
+     */
+    public function setContextTags($context_tags)
+    {
+        $this->container['context_tags'] = $context_tags;
+
+        return $this;
+    }
+
+    /**
+     * Gets context_url
+     * @return string
+     */
+    public function getContextUrl()
+    {
+        return $this->container['context_url'];
+    }
+
+    /**
+     * Sets context_url
+     * @param string $context_url (optional) The full URL when running in a browser when the event was generated.
+     * @return $this
+     */
+    public function setContextUrl($context_url)
+    {
+        $this->container['context_url'] = $context_url;
+
+        return $this;
+    }
+
+    /**
+     * Gets context_operation_time_millis
+     * @return int
+     */
+    public function getContextOperationTimeMillis()
+    {
+        return $this->container['context_operation_time_millis'];
+    }
+
+    /**
+     * Sets context_operation_time_millis
+     * @param int $context_operation_time_millis (optional) duration that this event took to occur in millis. Example - database call time in millis.
+     * @return $this
+     */
+    public function setContextOperationTimeMillis($context_operation_time_millis)
+    {
+        $this->container['context_operation_time_millis'] = $context_operation_time_millis;
+
+        return $this;
+    }
+
+    /**
+     * Gets context_cpu_percentage
+     * @return int
+     */
+    public function getContextCpuPercentage()
+    {
+        return $this->container['context_cpu_percentage'];
+    }
+
+    /**
+     * Sets context_cpu_percentage
+     * @param int $context_cpu_percentage (optional) CPU utilization as a percent when event occured
+     * @return $this
+     */
+    public function setContextCpuPercentage($context_cpu_percentage)
+    {
+        $this->container['context_cpu_percentage'] = $context_cpu_percentage;
+
+        return $this;
+    }
+
+    /**
+     * Gets context_memory_percentage
+     * @return int
+     */
+    public function getContextMemoryPercentage()
+    {
+        return $this->container['context_memory_percentage'];
+    }
+
+    /**
+     * Sets context_memory_percentage
+     * @param int $context_memory_percentage (optional) Memory utilization as a percent when event occured
+     * @return $this
+     */
+    public function setContextMemoryPercentage($context_memory_percentage)
+    {
+        $this->container['context_memory_percentage'] = $context_memory_percentage;
+
+        return $this;
+    }
+
+    /**
+     * Gets context_cross_app_correlation_id
+     * @return string
+     */
+    public function getContextCrossAppCorrelationId()
+    {
+        return $this->container['context_cross_app_correlation_id'];
+    }
+
+    /**
+     * Sets context_cross_app_correlation_id
+     * @param string $context_cross_app_correlation_id (optional) Cross application correlation ID
+     * @return $this
+     */
+    public function setContextCrossAppCorrelationId($context_cross_app_correlation_id)
+    {
+        $this->container['context_cross_app_correlation_id'] = $context_cross_app_correlation_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets context_device
+     * @return string
+     */
+    public function getContextDevice()
+    {
+        return $this->container['context_device'];
+    }
+
+    /**
+     * Sets context_device
+     * @param string $context_device (optional) Device information
+     * @return $this
+     */
+    public function setContextDevice($context_device)
+    {
+        $this->container['context_device'] = $context_device;
+
+        return $this;
+    }
+
+    /**
+     * Gets context_app_sku
+     * @return string
+     */
+    public function getContextAppSku()
+    {
+        return $this->container['context_app_sku'];
+    }
+
+    /**
+     * Sets context_app_sku
+     * @param string $context_app_sku (optional) Application SKU
+     * @return $this
+     */
+    public function setContextAppSku($context_app_sku)
+    {
+        $this->container['context_app_sku'] = $context_app_sku;
 
         return $this;
     }
