@@ -201,7 +201,7 @@ class TrakerrClient
         }
 
         if (is_null($appEvent->getEventTime())) {
-            $appEvent->setEventTime($this->millitime());
+            $appEvent->setEventTime((int)$this->millitime());
         }
         return $appEvent;
     }

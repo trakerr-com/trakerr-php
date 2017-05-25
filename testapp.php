@@ -38,6 +38,12 @@ try {
     $customStringData->setCustomData1("Some custom data");
     $customProperties->setStringData($customStringData);
     $appEvent2->setCustomProperties($customProperties);
+    $appEvent2->setContextOperationTimeMillis(1000);
+    $appEvent2->setContextCpuPercentage(60);
+    $appEvent2->setContextMemoryPercentage(80);
+    $appEvent2->setContextDevice("pc");
+    $appEvent2->setContextAppSku("mobile");
+    $appEvent2->setContextTags(["client, frontend"]);
 
     $trakerrClient->sendEvent($appEvent2);
 }
