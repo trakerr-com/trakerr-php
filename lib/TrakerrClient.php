@@ -63,6 +63,7 @@ class TrakerrClient
     private $contextDataCenter;
     private $contextDataCenterRegion;
     private $errorHelper;
+    private $contextTags;
 
     /**
      * TrakerrClient constructor.
@@ -71,7 +72,7 @@ class TrakerrClient
      * @param string $contextAppVersion (optional) application version, defaults to 1.0
      * @param string $contextEnvName (optional) environment name like "development", "staging", "production" or a custom string
      */
-    public function __construct($apiKey, $contextAppVersion = "1.0", $contextDeploymentStage = "development")
+    public function __construct($apiKey, $contextAppVersion = "1.0", $contextDeploymentStage = "development", $contextTags = NULL)
     {
         $this->apiKey = $apiKey;
         $this->contextAppVersion = is_null($contextAppVersion) ? "1.0" : $contextAppVersion;
@@ -86,6 +87,7 @@ class TrakerrClient
         $this->contextAppBrowserVersion = NULL;
         $this->contextDataCenter = NULL;
         $this->contextDataCenterRegion = NULL;
+        $this->contextTags = $contextTags;
 
         $apiClient = new ApiClient();
         $this->eventsApi = new EventsApi($apiClient);
@@ -201,7 +203,7 @@ class TrakerrClient
         }
 
         if (is_null($appEvent->getEventTime())) {
-            $appEvent->setEventTime($this->millitime());
+            $appEvent->setEventTime(intval($this->millitime()));
         }
         return $appEvent;
     }
@@ -385,5 +387,18 @@ class TrakerrClient
     public function getContextDataCenterRegion()
     {
         return $this->contextDataCenterRegion;
+    }
+
+    public function setContextTags($contexttags)
+    {
+        if (!is_array($contextdatacenterregion)) {
+            throw new \InvalidArgumentException('Function only accepts an array of strings');
+        }
+        $this->contextTags = $contexttags;
+    }
+
+    public function getContextTags()
+    {
+        return $this->contextTags;
     }
 }

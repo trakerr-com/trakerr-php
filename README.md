@@ -101,6 +101,8 @@ $contextDeploymentStage = "development")
 ```
 The TrakerrClient class however has a lot of exposed properties. The benefit to setting these immediately after after you create the TrakerrClient is that AppEvent will default it's values against the TrakerClient that created it. This way if there is a value that all your AppEvents uses, and the constructor default value currently doesn't suit you; it may be easier to change it in TrakerrClient as it will become the default value for all AppEvents created after. A lot of these are populated by default value by the constructor, but you can populate them with whatever string data you want. The following table provides an in depth look at each of those.
 
+If you're populating an app event directly, you'll want to take a look at the [AppEvent properties](generated/SwaggerClient-php/docs/Model/AppEvent.md) as they contain properties unique to each AppEvent which do not have defaults you may set in the client.
+
 Name | Type | Description | Notes
 ------------ | ------------- | -------------  | -------------
 **apiKey** | **string**  | API Key for your application. |
@@ -112,10 +114,11 @@ Name | Type | Description | Notes
 **contextEnvHostname** | **string** | Provide the current hostname. | Defaults Value: `gethostname()`.
 **contextAppOS** | **string** | Provide an operating system name. | Defaults Value: `php_uname("s")`.
 **contextAppOSVersion** | **string** | Provide an operating system version. | Default Value: `php_uname("v")`.
-**contextAppOSBrowser** | **string** | An optional string browser name the application is running on. | Defaults to `Null`
-**contextAppOSBrowserVersion** | **string** | An optional string browser version the application is running on. | Defaults to `Null`
-**contextDataCenter** | **string** | Data center the application is running on or connected to. | Defaults to `Null`
-**contextDataCenterRegion** | **string** | Data center region. | Defaults to `Null`
+**contextAppOSBrowser** | **string** | An optional string browser name the application is running on. | Defaults to `NULL`
+**contextAppOSBrowserVersion** | **string** | An optional string browser version the application is running on. | Defaults to `NULL`
+**contextDataCenter** | **string** | Data center the application is running on or connected to. | Defaults to `NULL`
+**contextDataCenterRegion** | **string** | Data center region. | Defaults to `NULL`
+**context_tags** | **string[]** | Any tags that describe the the module that this handler is for. | Defaults to `NULL`
 
 
 ## Documentation For Models
