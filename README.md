@@ -1,7 +1,24 @@
 # Trakerr - PHP API client
-Get your application events and errors to Trakerr via the *Trakerr Client*.
 
-## Requirements
+Get your application events and errors to Trakerr via the *Trakerr API*.
+
+You can send both errors and non-errors (plain log statements, for example) to Trakerr with this API.
+
+## Overview
+
+The **3-minute integration guide** is primarily oriented around sending errors or warnings and does not let you specify
+additional parameters. **Option-4 in the detailed integration guide** describes how you could send a non-exception (or any log statement)
+along with any additional parameters.
+
+The SDK takes performance impact seriously and all communication between the SDK <=> Trakerr avoids blocking the calling function. The SDK also applies asynchronous patterns where applicable.
+
+A Trakerr *Event* can consist of various parameters as described here in [TrakerrApi.AppEvent](https://github.com/trakerr-com/trakerr-javascript/blob/master/generated/docs/AppEvent.md).
+Some of these parameters are populated by default and others are optional and can be supplied by you.
+
+Since some of these parameters are common across all event's, the API has the option of setting these on the
+TrakerrClient instance (described towards the bottom) and offers a factory API for creating AppEvent's.
+
+### Requirements
 PHP 5.4.0 and later
 
 ## 3-minute Integration Guide
@@ -39,7 +56,8 @@ $trakerrClient->registerErrorHandlers();
 
 That should activate a global error handler for you to use.
 ## Detailed Integration Guide
-###Installation
+
+### Installation
 Please follow the [three minute guide](#3-minute-Integration-Guide) for supported installation instructions.
 
 ### Option-1: Register global event handler
