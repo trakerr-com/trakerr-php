@@ -54,7 +54,7 @@ $trakerrClient = new \trakerr\TrakerrClient("<api-key>", "App version here", "De
 $trakerrClient->registerErrorHandlers();
 ```
 
-That should activate a global error handler for you to use.
+That should activate a global error handler for you to use. **This will capture any Errors and Fatals that occur.**
 ## Detailed Integration Guide
 
 ### Installation
