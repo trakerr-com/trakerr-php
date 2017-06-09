@@ -1,7 +1,6 @@
 <?php
 
-use trakerr\client\model\CustomData;
-use trakerr\client\model\CustomStringData;
+require_once 'PHPUnit/Autoload.php';
 
 class TrakerrClientTest extends PHPUnit_Framework_TestCase
 {
