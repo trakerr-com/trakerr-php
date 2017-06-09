@@ -1,8 +1,8 @@
 <?php
 
-require_once 'PHPUnit/Autoload.php';
+#require_once 'PHPUnit/Autoload.php';
 
-class TrakerrClientTest extends PHPUnit_Framework_TestCase
+class TrakerrClientTest extends \PHPUnit_Framework_TestCase
 {
     protected static $tc;
 
