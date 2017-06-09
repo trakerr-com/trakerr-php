@@ -2,7 +2,7 @@
 
 #require_once 'PHPUnit/Autoload.php';
 
-class TrakerrClientTest extends PHPUnit_Framework_TestCase
+class TrakerrClientTest extends PHPUnit\Framework\TestCase
 {
     protected static $tc;
 
