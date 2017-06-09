@@ -7,12 +7,12 @@
         "sdk",
         "api"
     ],
-    "homepage": "http://swagger.io",
+    "homepage": "http://trakerr.io",
     "license": "Apache v2",
     "authors": [
         {
-            "name": "Swagger and contributors",
-            "homepage": "https://github.com/swagger-api/swagger-codegen"
+            "name": "Trakerr llc",
+            "homepage": "http://trakerr.io"
         }
     ],
     "require": {
@@ -22,7 +22,7 @@
         "ext-mbstring": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.8",
+        "phpunit/phpunit": "~6.2",
         "satooshi/php-coveralls": "~1.0",
         "squizlabs/php_codesniffer": "~2.6"
     },

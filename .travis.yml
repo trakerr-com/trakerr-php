@@ -1,0 +1,21 @@
+language: php
+php:
+  - "7.0"
+  - "7.1"
+
+#All pull requests are built. Commits on the following branches are built:
+branches:
+  only:
+  - master
+
+# command to install dependencies
+install: 
+  - composer install
+  
+# command to run tests
+script: #phpunit --bootstrap src/Email.php tests/EmailTest
+
+notifications:
+  email: false
+  #Add slack notifications instead when slack comes back up.
+  slack: trakerr:vrFTXvCHJrNvWsMHWg80gL5B
