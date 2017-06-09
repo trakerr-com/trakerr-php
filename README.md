@@ -20,7 +20,7 @@ Since some of these parameters are common across all event's, the API has the op
 TrakerrClient instance (described towards the bottom) and offers a factory API for creating AppEvent's.
 
 ### Requirements
-PHP 5.4.0 and later
+PHP 7.0 and later
 
 ## 3-minute Integration Guide
 
