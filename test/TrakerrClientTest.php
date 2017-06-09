@@ -11,7 +11,7 @@ class TrakerrClientTest extends PHPUnit\Framework\TestCase
         self::$tc = new \trakerr\TrakerrClient("898152e031aadc285c3d84aeeb3c1e386735434729425", "php", "CICD Tests");
     }
 
-    public static function testSendException()
+    public function testSendException()
     {
         try {
             throw new Exception("test exception");

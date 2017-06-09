@@ -1,4 +1,5 @@
 # Trakerr - PHP API client
+[![Build Status](https://travis-ci.org/trakerr-com/trakerr-php.svg?branch=master)](https://travis-ci.org/trakerr-com/trakerr-php)
 
 Get your application events and errors to Trakerr via the *Trakerr API*.
 
