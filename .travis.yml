@@ -11,6 +11,7 @@ branches:
 # command to install dependencies
 install: 
   - composer install
+  - sudo apt-get install -qq phpunit
   
 # command to run tests
 script: phpunit --bootstrap lib/TrakerrClient.php test/TrakerrClientTest
