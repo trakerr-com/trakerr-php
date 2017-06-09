@@ -13,7 +13,7 @@ install:
   - composer install
   
 # command to run tests
-script: #phpunit --bootstrap src/Email.php tests/EmailTest
+script: phpunit --bootstrap lib/TrakerrClient.php test/TrakerrClientTest
 
 notifications:
   email: false
