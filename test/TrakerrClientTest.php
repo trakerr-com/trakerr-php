@@ -1,9 +1,8 @@
 <?php
 
-use trakerr\client\model\CustomData;
-use trakerr\client\model\CustomStringData;
+#require_once 'PHPUnit/Autoload.php';
 
-class TrakerrClientTest extends PHPUnit_Framework_TestCase
+class TrakerrClientTest extends PHPUnit\Framework\TestCase
 {
     protected static $tc;
 
@@ -12,16 +11,19 @@ class TrakerrClientTest extends PHPUnit_Framework_TestCase
         self::$tc = new \trakerr\TrakerrClient("898152e031aadc285c3d84aeeb3c1e386735434729425", "php", "CICD Tests");
     }
 
-    public static function testSendException()
+    public function testSendException()
     {
         try {
             throw new Exception("test exception");
         } catch (Exception $e) {
-            self::$tc->sendError($e, "fatal");
+            $response = self::$tc->sendError($e, "fatal");
+            $this->assertTrue(is_array($response));
+            $this->assertArrayHasKey(1, $response);
+            $this->assertEquals($response[1], "200");
         }
     }
 
-    public static function testSendEvent()
+    public function testSendEvent()
     {
         // Option-4: send any event programmatically
         $appEvent = self::$tc->createAppEvent("warning", "warning", "Warning", "Test message from php");
@@ -31,7 +33,10 @@ class TrakerrClientTest extends PHPUnit_Framework_TestCase
         $appEvent->setContextDevice("pc");
         $appEvent->setContextAppSku("lenovo laptop");
         $appEvent->setContextTags(["client", "frontend"]);
-        self::$tc->sendEvent($appEvent);
+        $response = self::$tc->sendEvent($appEvent);
+        $this->assertTrue(is_array($response));
+        $this->assertArrayHasKey(1, $response);
+        $this->assertEquals($response[1], "200");
 
         try {
             throw new Exception("Too much math");
@@ -46,7 +51,10 @@ class TrakerrClientTest extends PHPUnit_Framework_TestCase
             $appEvent2->setContextAppSku("lenovo laptop");
             $appEvent2->setContextTags(["client", "frontend"]);
 
-            self::$tc->sendEvent($appEvent2);
+            $response2 = self::$tc->sendEvent($appEvent2);
+            $this->assertTrue(is_array($response2));
+            $this->assertArrayHasKey(1, $response2);
+            $this->assertEquals($response2[1], "200");
         }
     }
 }

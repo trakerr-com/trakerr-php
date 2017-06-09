@@ -128,7 +128,7 @@ class TrakerrClient
     public function sendEvent($appEvent)
     {
         $data = $this->fillDefaults($appEvent);
-        return $this->eventsApi->eventsPost($data);
+        return $this->eventsApi->eventsPostWithHttpInfo($data);
     }
 
     /**
@@ -141,7 +141,7 @@ class TrakerrClient
     {
         $appEvent = $this->errorHelper->createAppEvent($exc, $log_level, $classification);
         $data = $this->fillDefaults($appEvent);
-        return $this->eventsApi->eventsPost($data);
+        return $this->eventsApi->eventsPostWithHttpInfo($data);
     }
 
     /**
